@@ -1,0 +1,117 @@
+﻿@model StaffManagement.Models.Employee
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2 class="mb-4">Employee Details</h2>
+
+<div class="card p-4">
+    <p><strong>Name:</strong> @Model.FullName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+    <p><strong>Salary:</strong> @Model.Salary</p>
+    <p><strong>HireDate:</strong> @Model.HireDate</p>
+    <p><strong>Department:</strong> @Model.Department</p>
+    <p><strong>Position:</strong> @Model.Position</p>
+
+    <p>
+        <strong>Latest Score:</strong>
+        <strong>Score:</strong>
+        @if (Model.Evaluations != null && Model.Evaluations.Any())
+        {
+            @Model.Evaluations.First().Score
+        }
+        else
+        {
+            <text>No evaluations.</text>
+        }
+    </p>
+    </p>
+</div>
+<hr style="border-top: 3px solid #000;" />
+<div class="mb-4">
+    <h4>Projects</h4>
+    @if (Model.Projects != null && Model.Projects.Any())
+    {
+        <ul class="list-group mb-3">
+            @foreach (var project in Model.Projects)
+            {
+                <li class="list-group-item"><strong>Name Project: </strong>@project.Name</li>
+                <li class="list-group-item"><strong>Description: </strong>@project.Description</li>
+                <li class="list-group-item"><strong>Status: </strong>@project.Status</li>
+                <li class="list-group-item"><strong>StartDate: </strong>@project.StartDate</li>
+                <li class="list-group-item"><strong>EndDate: </strong>@project.EndDate</li>
+                <hr />
+            }
+        </ul>
+      
+    }
+    else
+    {
+        <p>No projects assigned.</p>
+    }
+</div>
+<hr style="border-top: 3px solid #000;" />
+<div class="mb-4">
+    <h4>Tasks</h4>
+    @if (Model.TaskItems != null && Model.TaskItems.Any())
+    {
+        <ul class="list-group mb-3">
+            @foreach (var task in Model.TaskItems)
+            {
+                <li class="list-group-item"><strong>Project:</strong> @(task.Project != null ? task.Project.Name : "N/A")</li>
+                <li class="list-group-item"><strong>Title:</strong> @task.Title</li>
+                <li class="list-group-item"><strong>Description:</strong> @task.Description</li>
+                <li class="list-group-item"><strong>Status:</strong> @task.Status</li>
+                <li class="list-group-item"><strong>Priority:</strong> @task.Priority</li>
+                <li class="list-group-item"><strong>Due Date:</strong> @(task.DueDate.HasValue? task.DueDate.Value.ToShortDateString() : "N/A")</li>
+                <hr />
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No tasks assigned.</p>
+    }
+</div>
+<hr style="border-top: 3px solid #000;" />
+<div class="mb-4">
+    <h4>Leave Requests</h4>
+    @if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+    {
+        <ul class="list-group mb-3">
+            @foreach (var leave in Model.LeaveRequests)
+            {
+                <li class="list-group-item">
+                    @leave.StartDate.ToShortDateString() - @leave.EndDate.ToShortDateString() (@leave.Status)
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No leave requests.</p>
+    }
+</div>
+<hr style="border-top: 3px solid #000;" />
+<div class="mb-4">
+    <h4>Evaluations</h4>
+    @if (Model.Evaluations != null && Model.Evaluations.Any())
+    {
+        <ul class="list-group mb-3">
+            @foreach (var eval in Model.Evaluations)
+            {
+                <li class="list-group-item">
+                    Score: @eval.Score - Date: @eval.EvaluationDate.ToShortDateString()
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No evaluations.</p>
+    }
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Back</a>

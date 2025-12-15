@@ -1,0 +1,55 @@
+﻿@model IEnumerable<StaffManagement.Models.Employee>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+   @{ ViewData["Title"] = "Index";
+   Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="m-0">Employees List</h2>
+    <a class="btn btn-primary" asp-area="Admin" asp-controller="Employees" asp-action="Create">
+        <i class="bi bi-plus-circle"></i> Add New Employee
+    </a>
+</div>
+
+<table class="table table-hover table-bordered align-middle shadow-sm">
+    <thead class="table-dark">
+        <tr class="text-center">
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Salary</th>
+            <th>Position</th>
+            <th style="width: 220px;">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var emp in Model)
+        {
+            <tr class="text-center">
+                <td>@emp.FullName</td>
+                <td>@emp.Email</td>
+                <td>@emp.PhoneNumber</td>
+                <td>@emp.Salary</td>
+                <td>@emp.Position</td>
+
+                <td>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Details" asp-route-id="@emp.Id" class="btn btn-sm btn-info text-white">
+                            <i class="bi bi-eye"></i> Details
+                        </a>
+
+                        <a asp-action="Edit" asp-route-id="@emp.Id" class="btn btn-sm btn-warning text-white">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+
+                        <a asp-action="Delete" asp-route-id="@emp.Id" class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

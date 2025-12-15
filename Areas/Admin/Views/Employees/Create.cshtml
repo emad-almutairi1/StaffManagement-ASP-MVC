@@ -1,0 +1,162 @@
+﻿@model StaffManagement.Models.Employee
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-container">
+    <div class="card-form shadow-lg">
+
+        <h2 class="mb-4">Add New Employee</h2>
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="row g-3">
+
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="col-md-6">
+        <label class="form-label">Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+        <span class="text-danger" asp-validation-for="FullName"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label class="form-label">Phone Number</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label">Salary</label>
+        <input asp-for="Salary" class="form-control" />
+        <span class="text-danger" asp-validation-for="Salary"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="HireDate" class="form-label"></label>
+        <input asp-for="HireDate" type="date" class="form-control" />
+        <span class="text-danger" asp-validation-for="HireDate"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Position</label>
+        <input asp-for="Position" class="form-control" />
+        <span class="text-danger" asp-validation-for="Position"></span>
+    </div>
+    <div class="col-md-6">
+        <label class="form-label">Department</label>
+        <input asp-for="Department" class="form-control" />
+        <span class="text-danger" asp-validation-for="Department"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="DateOfBirth" class="form-label"></label>
+        <input asp-for="DateOfBirth" type="date" class="form-control" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+   
+    <div class="col-md-6">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required />
+        <span class="text-danger">Password is required</span>
+    </div>
+    <div>
+        <label>Profile Image</label><br />
+
+        @if (Model.ImageData != null)
+        {
+            <img src="@(Model.ImageData != null ? $"data:{Model.ImageType};base64,{Convert.ToBase64String(Model.ImageData)}" : "")"
+                 alt="Profile Image" style="max-width:150px; max-height:150px;" />
+        }
+
+        <input type="file" asp-for="ClientFile" />
+
+         <div class="col-12">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+    </div>
+</form>
+</div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<style>
+     body {
+         background-color: #eef1f5;
+         font-family: "Segoe UI", sans-serif;
+     }
+
+     .card-container {
+         display: flex;
+         justify-content: center;
+         margin-top: 40px;
+         margin-bottom: 40px;
+     }
+
+     .card-form {
+         background: #fff;
+         width: 850px;
+         padding: 35px;
+         border-radius: 15px;
+         box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+     }
+
+     .form-label {
+         font-weight: 600;
+         color: #333;
+     }
+
+     .form-control {
+         border-radius: 8px;
+         padding: .55rem .85rem;
+         border: 1px solid #ced4da;
+         transition: .2s;
+         font-size: 0.92rem;
+     }
+
+         .form-control:focus {
+             border-color: #4e73df;
+             box-shadow: 0 0 0 3px rgba(78,115,223,0.15);
+         }
+
+     .btn-primary {
+         background-color: #4e73df;
+         border: none;
+         padding: .6rem 1.2rem;
+         border-radius: 6px;
+         font-size: 0.95rem;
+     }
+
+         .btn-primary:hover {
+             background-color: #2e59d9;
+         }
+
+     .btn-secondary {
+         background-color: #6c757d;
+         border: none;
+         padding: .6rem 1.2rem;
+         border-radius: 6px;
+         font-size: 0.95rem;
+     }
+
+         .btn-secondary:hover {
+             background-color: #5a6268;
+         }
+
+     .img-preview {
+         max-width: 130px;
+         max-height: 130px;
+         border-radius: 10px;
+         border: 1px solid #ddd;
+         padding: 4px;
+     }
+
+     .text-danger {
+         font-size: .8rem;
+     }
+</style>

@@ -1,0 +1,18 @@
+﻿@model StaffManagement.Models.Evaluation
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2 class="mb-4 text-danger">Confirm Delete</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete <strong>@Model.Id</strong>?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

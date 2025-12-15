@@ -1,0 +1,66 @@
+﻿@model StaffManagement.Models.TaskItem
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Project Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Title</dt>
+        <dd class="col-sm-10">@Model.Title</dd>
+
+        <dt class="col-sm-2">ProjectId</dt>
+        <dd class="col-sm-10">@Model.ProjectId</dd>
+
+        <dt class="col-sm-2">EmployeeId</dt>
+        <dd class="col-sm-10">@Model.EmployeeId</dd>
+
+        <dt class="col-sm-2">Description</dt>
+        <dd class="col-sm-10">@Model.Description</dd>
+
+        <dt class="col-sm-2">Start Date</dt>
+        <dd class="col-sm-10">@Model.DueDate</dd>
+
+        <dt class="col-sm-2">Priority</dt>
+        <dd class="col-sm-10">@Model.Priority</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Attachment</dt>
+        <dd class="col-sm-10">
+            @if (Model.AttachmentData != null)
+            {
+                if (Model.AttachmentType.StartsWith("image"))
+                {
+                    <img src="data:@Model.AttachmentType;base64,@Convert.ToBase64String(Model.AttachmentData)"
+                         style="max-width:50px; border-radius:4px;" />
+                }
+                else
+                {
+                    <a href="@Url.Action("PreviewAttachment", "Task", new { id = Model.Id })"
+                       target="_blank"
+                       class="btn btn-sm btn-info">
+                        <i class="fa fa-eye"></i> Preview
+                    </a>
+                }
+            }
+            else
+            {
+                <span class="text-muted">No File</span>
+            }
+
+        </dd>
+       
+    </dl>
+</div>
+
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</p>

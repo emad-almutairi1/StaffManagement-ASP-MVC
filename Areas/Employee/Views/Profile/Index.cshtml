@@ -1,0 +1,238 @@
+﻿@model StaffManagement.Models.Employee
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (Model == null)
+{
+    <div class="alert alert-warning">
+        Employee data not found for current user.
+    </div>
+}
+else
+{
+    <h1>Profile @Model.FullName</h1>
+}
+
+<style>
+    .profile-header {
+        background: linear-gradient(135deg, #4a90e2, #007bff);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+    }
+
+    .stats-box {
+        background: #fff;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .tab-content {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+</style>
+
+<div class="profile-header mb-4 d-flex align-items-center gap-4">
+    <img class="profile-avatar"
+         src="@(Model.ImageData != null
+                        ? $"data:{Model.ImageType};base64,{Convert.ToBase64String(Model.ImageData)}"
+                        : "/images/default-user.png")" />
+
+    <div>
+        <h2 class="mb-1">@Model.FullName</h2>
+        <p class="mb-1"><strong>@Model.Position</strong> — @Model.Department</p>
+        <p class="mb-1">@Model.Email</p>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id"
+           class="btn btn-light text-primary fw-bold mt-2">
+            Edit Profile
+        </a>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-box">
+            <h4>@(Model.Projects?.Count() ?? 0)</h4>
+            <p class="text-muted">Projects</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stats-box">
+            <h4>@(Model.TaskItems?.Count() ?? 0)</h4>
+            <p class="text-muted">Tasks</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stats-box">
+            <h4>@(Model.LeaveRequests?.Count() ?? 0)</h4>
+            <p class="text-muted">Leave Requests</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stats-box">
+            <h4>@(Model.Evaluations != null && Model.Evaluations.Any() ? Model.Evaluations.First().Score : 0)</h4>
+            <p class="text-muted">Latest Score</p>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<ul class="nav nav-tabs mb-3" id="profileTabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#info">Employee Info</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#projects">Projects</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#tasks">Tasks</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#leaves">Leave Requests</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#evaluations">Evaluations</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <!-- INFO -->
+    <div class="tab-pane fade show active" id="info">
+        <h4 class="mb-3">Employee Information</h4>
+
+        <div class="row mb-3">
+            <div class="col-md-6"><strong>Name:</strong> @Model.FullName</div>
+            <div class="col-md-6"><strong>Email:</strong> @Model.Email</div>
+            <div class="col-md-6"><strong>Phone:</strong> @Model.PhoneNumber</div>
+            <div class="col-md-6"><strong>Salary:</strong> @Model.Salary</div>
+            <div class="col-md-6"><strong>Hire Date:</strong> @Model.HireDate</div>
+            <div class="col-md-6"><strong>Birth Date:</strong> @Model.DateOfBirth?.ToShortDateString()</div>
+            <div class="col-md-6"><strong>Department:</strong> @Model.Department</div>
+            <div class="col-md-6"><strong>Position:</strong> @Model.Position</div>
+        </div>
+
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit Information</a>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="tab-pane fade" id="projects">
+        <h4 class="mb-3">Projects</h4>
+
+        @if (Model.Projects != null && Model.Projects.Any())
+        {
+            <div class="list-group">
+                @foreach (var p in Model.Projects)
+                {
+                    <div class="list-group-item mb-2">
+                        <strong>@p.Name</strong>
+                        <p class="mb-1">@p.Description</p>
+                        <p>Status: @p.Status</p>
+                        <p>From: @p.StartDate.ToShortDateString() — To: @p.EndDate</p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No projects assigned.</p>
+        }
+    </div>
+
+    <!-- TASKS -->
+    <div class="tab-pane fade" id="tasks">
+        <h4 class="mb-3">Tasks</h4>
+
+        @if (Model.TaskItems != null && Model.TaskItems.Any())
+        {
+            <div class="list-group">
+                @foreach (var t in Model.TaskItems)
+                {
+                    <div class="list-group-item mb-2">
+                        <p><strong>Project:</strong> @(t.Project != null ? t.Project.Name : "N/A")</p>
+                        <p><strong>Title:</strong> @t.Title</p>
+                        <p><strong>Description:</strong> @t.Description</p>
+                        <p><strong>Status:</strong> @t.Status</p>
+                        <p><strong>Priority:</strong> @t.Priority</p>
+                        <p><strong>Due Date:</strong> @(t.DueDate?.ToShortDateString() ?? "N/A")</p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No tasks assigned.</p>
+        }
+    </div>
+
+    <!-- LEAVE REQUESTS -->
+    <div class="tab-pane fade" id="leaves">
+        <h4 class="mb-3">Leave Requests</h4>
+
+        @if (Model.LeaveRequests != null && Model.LeaveRequests.Any())
+        {
+            <ul class="list-group">
+                @foreach (var l in Model.LeaveRequests)
+                {
+                    <li class="list-group-item">
+                        @l.StartDate.ToShortDateString() — @l.EndDate.ToShortDateString()
+                        <span class="badge bg-primary">@l.Status</span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No leave requests.</p>
+        }
+    </div>
+
+    <!-- EVALUATIONS -->
+    <div class="tab-pane fade" id="evaluations">
+        <h4 class="mb-3">Evaluations</h4>
+
+        @if (Model.Evaluations != null && Model.Evaluations.Any())
+        {
+            <ul class="list-group mb-3">
+                @foreach (var eval in Model.Evaluations)
+                {
+                    <li class="list-group-item">
+                        Score: @eval.Score - Date: @eval.EvaluationDate.ToShortDateString()
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No evaluations.</p>
+        }
+    </div>
+
+</div>

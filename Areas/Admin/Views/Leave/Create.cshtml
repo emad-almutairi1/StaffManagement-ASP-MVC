@@ -1,0 +1,51 @@
+﻿@model StaffManagement.Models.LeaveRequest
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Leave Request</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="EmployeeId"></label>
+        <select asp-for="EmployeeId" asp-items="ViewBag.Employees" class="form-control">
+            <option value="">-- Select Employee --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Reason"></label>
+        <textarea asp-for="Reason" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

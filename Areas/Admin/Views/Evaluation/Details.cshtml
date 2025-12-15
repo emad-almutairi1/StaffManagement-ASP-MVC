@@ -1,0 +1,29 @@
+﻿@model StaffManagement.Models.Evaluation
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Evaluation Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Employee</dt>
+            <dd class="col-sm-9">@Model.Employee?.FullName</dd>
+
+            <dt class="col-sm-3">Evaluation Date</dt>
+            <dd class="col-sm-9">@Model.EvaluationDate.ToString("yyyy-MM-dd")</dd>
+
+            <dt class="col-sm-3">Score</dt>
+            <dd class="col-sm-9">@Model.Score</dd>
+
+            <dt class="col-sm-3">Comments</dt>
+            <dd class="col-sm-9">@Model.Comments</dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

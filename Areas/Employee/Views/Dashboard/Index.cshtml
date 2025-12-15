@@ -1,0 +1,142 @@
+﻿@model StaffManagement.ViewModels.EmployeeDashboardVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+<h2 class="mb-4 fw-bold"> Welcome @Model.FullName</h2>
+
+<div class="row mb-4">
+
+    <!-- Tasks -->
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px;">@Model.TaskCount</h4>
+
+                <a asp-area="Employee" asp-controller="Tasks" asp-action="Index"
+                   class="btn btn-light btn-sm mt-3">
+                    View tasks
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Projects</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px;">@Model.ProjectsCount</h4>
+
+                <a asp-area="Employee" asp-controller="Projects" asp-action="Index"
+                   class="btn btn-light btn-sm mt-3">
+                    View projects
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evaluations -->
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Evaluations</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px;">@Model.EvaluationsCount</h4>
+
+                <a asp-area="Employee" asp-controller="Evaluation" asp-action="Index"
+                   class="btn btn-light btn-sm mt-3">
+                    View Evaluations
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaves -->
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Leave requests</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px;">@Model.LeaveRequestsCount</h4>
+
+                <a asp-area="Employee" asp-controller="Leave" asp-action="Index"
+                   class="btn btn-light btn-sm mt-3">
+                    View Leave
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Latest Tasks -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold">
+        <i class="fa fa-clock text-info"></i> Latest Tasks
+    </div>
+
+    <div class="card-body">
+
+        @if (Model.LastTasks == null || !Model.LastTasks.Any())
+        {
+            <p class="text-muted">There are no tasks yet</p>
+        }
+        else
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Project Name</th>
+                        <th>DueDate</th>
+                        <th>file</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var task in Model.LastTasks)
+                    {
+                        <tr>
+                            <td>@task.Title</td>
+                            <td>@task.Status</td>
+                            <td>@task.Project?.Name</td>
+                            <td>@task.DueDate?.ToString("yyyy/MM/dd")</td>
+                            <td>
+                                @if (task.AttachmentData != null)
+                                {
+                                    if (task.AttachmentType.StartsWith("image"))
+                                    {
+                                        <img src="data:@task.AttachmentType;base64,@Convert.ToBase64String(task.AttachmentData)"
+                                             style="max-width:50px; border-radius:4px;" />
+                                    }
+                                    else
+                                    {
+                                        @if (task.AttachmentData != null)
+                                        {
+                                            <a href="@Url.Action("PreviewAttachment", "Dashboard", new { id = task.Id })"
+                                               target="_blank"
+                                               class="btn btn-sm btn-info">
+                                                <i class="fa fa-eye"></i> Preview
+                                            </a>
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No File</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+</div>

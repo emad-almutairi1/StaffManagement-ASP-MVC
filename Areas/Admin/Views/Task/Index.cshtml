@@ -1,0 +1,45 @@
+﻿@model IEnumerable<StaffManagement.Models.TaskItem>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tasks List</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Task</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Project</th>
+            <th>Employee</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+
+                <td>@task.ProjectId</td>
+                <td>@task.EmployeeId</td>
+                
+                <td>@task.Status</td>
+                <td>@task.Priority</td>
+                <td>@task.DueDate?.ToString("yyyy-MM-dd")</td>
+                
+                <td>
+                    <a asp-action="Edit" asp-route-id="@task.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@task.Id" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@task.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

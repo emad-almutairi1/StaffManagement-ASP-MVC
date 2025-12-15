@@ -1,0 +1,131 @@
+﻿@model StaffManagement.ViewModels.DashboardViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4">Dashboard</h2>
+
+<div class="row mb-4">
+    <!-- Employees Card -->
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Employees</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px; font-size:1rem;">@Model.EmployeesCount</h4>
+                <a asp-area="Admin" asp-controller="Employees" asp-action="Index" class="btn btn-light btn-sm mt-3">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Card -->
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Projects</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px; font-size:1rem;">@Model.ProjectsCount</h4>
+                <a asp-area="Admin" asp-controller="Project" asp-action="Index" class="btn btn-light btn-sm mt-3">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Card -->
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Tasks</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px; font-size:1rem;">@Model.TasksCount</h4>
+                <a asp-controller="Task" asp-action="Index" class="btn btn-light btn-sm mt-3">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaves Card -->
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Leaves</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px; font-size:1rem;">@Model.LeaveRequestsCount</h4>
+                <a asp-controller="Leave" asp-action="Index" class="btn btn-light btn-sm mt-3">View Details</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evaluations Card -->
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3 position-relative">
+            <div class="card-body">
+                <h5 class="card-title">Evaluations</h5>
+                <h4 class="position-absolute" style="top:10px; right:10px; font-size:1rem;">@Model.EvaluationsCount</h4>
+                <a asp-controller="Evaluation" asp-action="Index" class="btn btn-light btn-sm mt-3">View Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-people-fill me-2"></i> Clients
+        </h5>
+
+        <input id="searchInput" type="text" class="form-control w-25" placeholder="Search...">
+    </div>
+
+    <div class="card-body">
+        <div class="row g-3" id="employeeCards">
+
+            @foreach (var emp in Model.Employees)
+            {
+                <div class="col-md-4 employee-card">
+                    <div class="card border-0 shadow-sm p-2 d-flex flex-row align-items-center">
+
+                        @{
+                            string imgSrc;
+
+                            if (emp.ImageData != null)
+                            {
+                                string base64 = Convert.ToBase64String(emp.ImageData);
+                                imgSrc = $"data:{emp.ImageType};base64,{base64}";
+                            }
+                            else
+                            {
+                                imgSrc = "https://via.placeholder.com/60";
+                            }
+                        }
+
+
+                        <div>
+                            <small class="text-muted">@emp.Id</small><br>
+                            <h6 class="mb-0 fw-bold">@emp.FullName</h6>
+
+                            <small class="text-muted">Position: @emp.Position</small><br>
+
+                            <small class="text-muted">Department: @emp.Department</small><br>
+                            <small class="text-muted">Email: @emp.Email</small><br>
+                            <small class="text-muted">PhoneNumber: @emp.PhoneNumber</small><br>
+
+                            <small class="text-muted">Joined: @emp.HireDate</small><br>
+
+                            <small class="text-muted">Salary: @emp.Salary</small>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let cards = document.querySelectorAll(".employee-card");
+
+        cards.forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(value) ? "" : "none";
+        });
+    });
+</script>

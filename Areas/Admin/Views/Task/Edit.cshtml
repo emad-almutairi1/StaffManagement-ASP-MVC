@@ -1,0 +1,63 @@
+﻿@model StaffManagement.Models.TaskItem
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Task</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Priority"></label>
+        <select asp-for="Priority" class="form-control">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control">
+            <option>Not Started</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProjectId"></label>
+        <select asp-for="ProjectId" asp-items="ViewBag.Projects" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmployeeId"></label>
+        <select asp-for="EmployeeId" asp-items="ViewBag.Employees" class="form-control"></select>
+    </div>
+    <div class="mb-3">
+        <label>Attachment</label>
+        <input asp-for="ClientFile" type="file" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+</form>
